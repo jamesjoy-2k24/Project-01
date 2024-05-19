@@ -68,7 +68,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="pb-16 pt-10 max-w-[1000px] mx-auto">
+    <footer className="pb-16 pt-10 max-w-[1200px] mx-auto bordex">
       <div className="container">
         <div className="flex justify-between items-center flex-col md:flex-row flex-wrap gap-[30px]">
 
@@ -87,8 +87,8 @@ const Footer = () => {
                 <Link
                   to={link.path}
                   key={index}
-                  className="w-9 h-9 border border-solid border-primaryColor rounded-full flex items-center
-                                justify-center group hover:bg-primaryColor hover:border-none hover:text-whiteColor transition-all"
+                  className="w-9 h-9 border border-solid border-primaryColor  rounded-full flex items-center
+                                justify-center group hover:bg-primaryColor transition duration-300 hover:border-none hover:text-whiteColor "
                 >
                   {link.icon}
                 </Link>

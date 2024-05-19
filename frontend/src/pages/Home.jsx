@@ -49,7 +49,7 @@ const Home = () => {
                   recruitment platform. We have a huge database of players with
                   a lot of players and clubs.
                 </p>
-                <button className="btn bg-primaryColor text-white">
+                <button className="btn mt-[2rem] bg-primaryColor text-white">
                   Get Started
                 </button>
               </div>
@@ -58,16 +58,16 @@ const Home = () => {
 
               <div className="mt-[30px] lg:mt-[70px] flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-[30px]">
                 <div className="flex flex-col items-center gap-3 text-center">
-                  <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px]  text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
-                    50+
+                  <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px] rounded-[10px] text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
+                    30+
                   </h1>
                   <p className="text__para text-whiteColor font-[500]">Clubs</p>
                   <p className="">⭐⭐⭐</p>
                 </div>
 
                 <div className="flex flex-col items-center gap-3 text-center">
-                  <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px]  text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
-                    50+
+                  <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px] rounded-[10px] text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
+                    80+
                   </h1>
                   <p className="text__para text-whiteColor font-[500]">
                     Active Players
@@ -76,7 +76,7 @@ const Home = () => {
                 </div>
 
                 <div className="flex flex-col items-center gap-3 text-center">
-                  <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px]  text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
+                  <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px] rounded-[10px] text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
                     100%
                   </h1>
                   <p className="text__para text-whiteColor font-[500]">
@@ -260,7 +260,7 @@ const Home = () => {
 
      {/* Scroll-to-Top Button */}
      <div
-        className="scroll-to-top fixed bottom-4 right-4 bg-primaryColor text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition duration-300 z-20"
+        className="scroll-to-top fixed bottom-4 right-4 bg-primaryColor text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-black transition duration-300 z-20"
         onClick={scrollToTop}
       >
         <FaArrowUp className="text-xl" />

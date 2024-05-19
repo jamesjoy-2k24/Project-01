@@ -20,21 +20,20 @@ body{
   z-index: 9999999;
 }
 
-@media only screen and (max-width: 770px){
-  .navigation{
+@media only screen and (max-width: 770px) {
+  .navigation {
+    display: block;
+  }
+  .sticky__header {
     display: none;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
   }
 
-  .menu{
-    width: 15rem;
+  .menu {
+    width: 80%;
+    max-width: 300px;
     height: 100%;
     position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     z-index: 200;
@@ -43,10 +42,15 @@ body{
     justify-content: center;
     line-height: 30px;
     background-color: white;
+    transform: translateX(100%);
+    transition: 0.5s;
+
+  
+    color: white;
+
   }
 
-  .show__menu{  
-    display: block;
+  .show__menu .menu {
+    transform: translateX(0);
   }
-
 }

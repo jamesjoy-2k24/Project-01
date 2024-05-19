@@ -1,6 +1,7 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
 
 const navLinks = [
   {
@@ -12,21 +13,22 @@ const navLinks = [
     display: "Services",
   },
   {
-    path: "/players",
-    display: "Find Players",
-  },
-  {
     path: "/contact",
     display: "Contact",
+  },
+  {
+    path: "/players",
+    display: "Find Players",
   },
 ];
 
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleStickeyHeader = () => {
-    window.addEventListener('scroll', () => {
+  const handleStickyHeader = () => {
+    window.addEventListener("scroll", () => {
       if (
         document.body.scrollTop > 80 ||
         document.documentElement.scrollTop > 80
@@ -37,25 +39,36 @@ const Header = () => {
       }
     });
     return () => {
-      window.removeEventListener("scroll", handleStickeyHeader);
-    }
-  }
+      window.removeEventListener("scroll", handleStickyHeader);
+    };
+  };
+
   useEffect(() => {
-    handleStickeyHeader();
+    handleStickyHeader();
 
     return () => {
-      window.removeEventListener("scroll", handleStickeyHeader);
+      window.removeEventListener("scroll", handleStickyHeader);
     };
   });
 
-  const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+
+    if (menuOpen) {
+      menuRef.current.classList.remove("show__menu");
+    } else {
+      menuRef.current.classList.add("show__menu");
+    }
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
-    <header className="header flex items-center bg-white " ref={headerRef}>
+    <header className="header flex items-center bg-white" ref={headerRef}>
       <div className="container">
         <div className="flex items-center justify-between">
-
-
           {/* ======Nav Left===== */}
           <div className="logo">
             <h1 className="text-primaryColor text-[28px] font-[700]">
@@ -63,10 +76,12 @@ const Header = () => {
             </h1>
           </div>
 
-
           {/* ======Nav Center===== */}
-          <div className="navigation" ref={menuRef} onClick={toggleMenu}>
-            <ul className="menu flex items-center gap-[2.7rem]">
+          <div
+            className={`navigation ${menuOpen ? "show__menu" : ""} md:block`}
+            ref={menuRef}
+          >
+            <ul className="menu flex flex-col md:flex-row items-center gap-[2.7rem]">
               {navLinks.map((link, index) => (
                 <li key={index}>
                   <NavLink
@@ -74,8 +89,9 @@ const Header = () => {
                     className={(navClass) =>
                       navClass.isActive
                         ? "text-primaryColor text-[17px] leading-7 font-[700] border-b-2 border-primaryColor"
-                        : "text-black text-[17px] leading-7 font-[700]"
+                        : "text-black text-[17px] leading-7 font-[800] hover:text-primaryColor transition-all duration-300"
                     }
+                    onClick={closeMenu}
                   >
                     {link.display}
                   </NavLink>
@@ -99,13 +115,17 @@ const Header = () => {
             </div>
 
             <Link to="/login">
-              <button className="bg-redColor text-whiteColor py-3 px-6 text-[16px] font-[600] h-[40px] flex items-center justify-center rounded-[50px]">
+              <button className="bg-primaryColor hover:opacity-80 text-whiteColor py-3 px-6 text-[16px] font-[600] h-[40px] flex items-center justify-center rounded-[50px]">
                 Login
               </button>
             </Link>
 
             <span className="md:hidden" onClick={toggleMenu}>
-              <BiMenu className="w-6 h-6 cursor-pointer" />
+              {menuOpen ? (
+                <AiOutlineClose className="text-3xl z-10 cursor-pointer" />
+              ) : (
+                <BiMenu className="text-3xl z-10" />
+              )}
             </span>
           </div>
         </div>
