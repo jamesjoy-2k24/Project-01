@@ -1,7 +1,8 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
+import { authContext } from "../../context/authContext.jsx";
 
 const navLinks = [
   {
@@ -26,6 +27,7 @@ const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, role, token } = useContext(authContext);
 
   const handleStickyHeader = () => {
     window.addEventListener("scroll", () => {
@@ -79,8 +81,7 @@ const Header = () => {
           {/* ======Nav Center===== */}
           <div
             className={`navigation ${menuOpen ? "show__menu" : ""} md:block`}
-            ref={menuRef}
-          >
+            ref={menuRef}>
             <ul className="menu flex flex-col md:flex-row items-center gap-[2.7rem]">
               {navLinks.map((link, index) => (
                 <li key={index}>
@@ -91,8 +92,7 @@ const Header = () => {
                         ? "text-primaryColor text-[17px] leading-7 font-[700] border-b-2 border-primaryColor"
                         : "text-black text-[17px] leading-7 font-[800] hover:text-primaryColor transition-all duration-300"
                     }
-                    onClick={closeMenu}
-                  >
+                    onClick={closeMenu}>
                     {link.display}
                   </NavLink>
                 </li>
@@ -102,23 +102,31 @@ const Header = () => {
 
           {/* ======Nav Right===== */}
           <div className="flex items-center gap-4">
-            <div>
-              <Link to="/">
-                <figure className="w-[40px] h-[40px] rounded-full">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                    alt="user"
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                </figure>
-              </Link>
-            </div>
+            {token && user ? (
+              <div className="flex gap-4 items-center">
+                <Link
+                  to={`${
+                    role === "player"
+                      ? "/players/profile/me"
+                      : "/users/profile/me"
+                  }`}>
+                  <figure className="w-[35px] h-[35px] rounded-full cursor-pointer">
+                    <img
+                      src={user?.photo}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </figure>
 
-            <Link to="/login">
-              <button className="bg-primaryColor hover:opacity-80 text-whiteColor py-3 px-6 text-[16px] font-[600] h-[40px] flex items-center justify-center rounded-[50px]">
-                Login
-              </button>
-            </Link>
+                </Link>
+                  <h1 className="font-[600] text-[18px]">{user?.name}</h1>
+              </div>
+            ) : (
+              <Link to="/login">
+                <button className="bg-primaryColor hover:opacity-80 text-whiteColor py-3 px-6 text-[16px] font-[600] h-[40px] flex items-center justify-center rounded-[50px]">
+                  Login
+                </button>
+              </Link>
+            )}
 
             <span className="md:hidden" onClick={toggleMenu}>
               {menuOpen ? (

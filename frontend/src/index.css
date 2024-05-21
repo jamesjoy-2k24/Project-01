@@ -32,6 +32,16 @@
   .hero__section {
     @apply bg-[url('./src/assets/images/login.jpg')] bg-no-repeat bg-cover bg-bottom  ;
   }
+
+  .form__label{
+    @apply text-black font-semibold text-[16px] leading-7 mb-2
+  }
+
+  .form__input{
+    @apply w-full px-4 py-3 border border-solid border-gray-200 focus:outline-none
+    focus:border-primaryColor text-[16px] leading-7 text-grayColor placeholder:text-gray-500
+    cursor-pointer rounded-md
+  }
 }
 
 @media only screen and (max-width: 1024px) {

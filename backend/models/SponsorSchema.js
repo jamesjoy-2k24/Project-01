@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 
 const sponsorSchema = new mongoose.Schema({
-    userID : {
+    sponsorId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "Sponsor"
     },
     name: {
         type: String,
@@ -12,7 +11,6 @@ const sponsorSchema = new mongoose.Schema({
     },
     nic: {
         type: String,
-        required: true
     },
     email: {
         type: String,
@@ -26,16 +24,18 @@ const sponsorSchema = new mongoose.Schema({
         type: String,
         default: 'sponsor'
     },
-    verified:{
-        type: Boolean,
-        default: false
+  isApproved: {
+        type: String,
+        enum: ["pending", "approved", "declined"],
+        default: "pending"
+
+  },
+  bookings: [{
+    player: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Player"
     },
-    appointments:[
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Appointment"
-        }
-    ],
+  }],
     token: String,
     place: String,
     company: String,
@@ -45,4 +45,5 @@ const sponsorSchema = new mongoose.Schema({
         default: Date.now
     }},{timestamps: true});
 
-export default mongoose.model("Sponsor", screenLeftponsorSchema)
+
+export default mongoose.model("Sponsor", sponsorSchema)

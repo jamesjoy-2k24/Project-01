@@ -13,7 +13,7 @@ const PlayerDetails = () => {
       <div className="max-w-[1170px] px-5 mx-auto">
         <div className="grid md:grid-cols-3 gap-[30px]">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-5">
+            <div className="flex flex-col md:flex-row lg:flex-row items-center gap-5">
               <figure className="max-w-[200px] max-h-[200px]">
                 <img
                   src={Profile}
@@ -23,7 +23,7 @@ const PlayerDetails = () => {
               </figure>
 
               <div className="w-full mt-[6rem]">
-                <span className="bg-grayColor text-black py-2 px-3 lg:py-2 lg:px-6 text-[12px] leading-4 lg:text-[16px] lg:leading-5 font-semibold rounded">
+                <span className="flex w-[150px] justify-center mx-auto lg:flex-none bg-grayColor text-black py-2 px-3 lg:py-2 lg:px-6 text-[12px] leading-4 lg:text-[16px] lg:leading-5 font-semibold rounded">
                   Soccer
                 </span>
                 <h2 className="heading text-black text-[22px] leading-9 mt-[2rem] font-bold">
@@ -44,7 +44,7 @@ const PlayerDetails = () => {
                   </span>
                 </div>
 
-                <p className="text__para text-[14px] leading-6 md:text-[15px] lg:max-w-[380px]">
+                <p className="text__para text-[14px] leading-6 md:text-[15px] lg:max-w-[380px] text-justify">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   ljjj Lorem ipsum dolor sit amet, consectetur adipiscing elit,

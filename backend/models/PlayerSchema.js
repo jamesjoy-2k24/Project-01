@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 
 const playerSchema = new mongoose.Schema({
-    userID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Player",
-        required: true
+    playerId: {
+        type: String,
     },
     email:{
         type: String,
@@ -21,7 +19,6 @@ const playerSchema = new mongoose.Schema({
     },
     nic: {
         type: String,
-        required: true
     },
     photo: {
         type: [String]
@@ -48,6 +45,9 @@ const playerSchema = new mongoose.Schema({
     sports:{
         type: [String]
     },
+    position: {
+        type: String
+    },
     gender: {
         type: String
     },
@@ -66,13 +66,28 @@ const playerSchema = new mongoose.Schema({
             ref: "Review"
         }
     ],
+    ratings: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Rating"
+        }
+    ],
+    averageRating: {
+        type: Number,
+        default: 0
+    },
     totalRatings: {
         type: Number,
         default: 0
     },
-    totalRatingsValue: {
-        type: Number,
-        default: 0
+    isApproved: {
+        type:String,
+        enum:["pending", "approved", "declined"],
+        default: "pending"
+    },
+    bookings: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking"
     }
 });
     
