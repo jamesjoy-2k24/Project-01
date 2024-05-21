@@ -6,7 +6,6 @@ import useFetchData from "../../hooks/useFetchData";
 import { BASE_URL } from "../../config";
 import Loading from "../../components/Loader/Loading"; 
 import Error from "../../components/Error/Error";
-import userImg from "../../assets/images/profile1.jpg";
 
 const MyAccount = () => {
   const { dispatch } = useContext(authContext);
@@ -39,7 +38,7 @@ const MyAccount = () => {
           <div className="flex items-center justify-center">
             <figure className="w-[100px] h-[100px] rounded-full border-2 border-solid border-primaryColor">
               <img
-                src={userImg}
+                src={userData?.photo}
                 alt="user"
                 className="w-full h-full rounded-full object-cover"
               />
@@ -50,14 +49,12 @@ const MyAccount = () => {
             <h3 className="text-[18px] leading-[30px] text-black font-bold">
               {userData?.name || "User"}
             </h3>
-            <p className="text-gray-500 text-[16px] leading-6 font-medium">
+            <p className="text-gray-800 text-[16px] leading-6 font-medium">
               {userData?.email || "user@gmail.com"}
             </p>
-            <p className="text-gray-500 text-[16px] leading-6 font-medium">
-              I am a{" "}
-              <span className="text-primaryColor ml-2 text-[20px] ">
+            <p className="text-gray-800 text-[16px] leading-6 font-medium">
                 {userData?.role || "Sponsor"}
-              </span>
+        
             </p>
 
             <p className="text-gray-800 text-[15px] leading-6 font-medium">
@@ -103,6 +100,8 @@ const MyAccount = () => {
         </div>
       </div>
       )}
+
+
     </div>
     </section>
   );

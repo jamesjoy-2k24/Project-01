@@ -3,6 +3,8 @@ import { NavLink, Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { authContext } from "../../context/authContext.jsx";
+import useFetchData from "../../hooks/useFetchData.jsx";
+import { BASE_URL } from "../../config";
 
 const navLinks = [
   {
@@ -28,6 +30,11 @@ const Header = () => {
   const menuRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, role, token } = useContext(authContext);
+
+  const { data} = useFetchData(
+    `${BASE_URL}/users/profile/me`,
+  );
+  
 
   const handleStickyHeader = () => {
     window.addEventListener("scroll", () => {
@@ -112,8 +119,8 @@ const Header = () => {
                   }`}>
                   <figure className="w-[35px] h-[35px] rounded-full cursor-pointer">
                     <img
-                      src={user?.photo}
-                      className="w-full h-full object-cover rounded-full"
+                      src={data?.photo}
+                      className="w-full h-full object-cover object-top rounded-full"
                     />
                   </figure>
 

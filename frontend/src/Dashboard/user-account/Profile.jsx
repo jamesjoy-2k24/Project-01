@@ -11,26 +11,28 @@ const Profile = ({ user: data }) => {
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-    place: "",
+    name: data.name || "",
+    email: data.email || "",
+    password: data.password || "",
+    phone: data.phone || "",
+    place: data.place || "",
+    company: data.company || "",
     photo: null,
-    gender: "",
+    gender: data.gender || "",
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setFormData({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      phone: data.phone,
-      place: data.place,
+      name: data.name || "",
+      email: data.email || "",
+      password: data.password || "",
+      phone: data.phone || "",
+      place: data.place || "",
+      company: data.company || "",
       photo: null,
-      gender: data.gender,
+      gender: data.gender || "",
     });
   }, [data]);
 
@@ -41,19 +43,19 @@ const Profile = ({ user: data }) => {
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value !== "" ? e.target.value : null,
     });
   };
 
-  const handleFileInputChange = async  (e) => {
+  const handleFileInputChange = async (e) => {
     const file = e.target.files[0];
 
-    const data = await  uploadCloudinary(file);
+    const data = await uploadCloudinary(file);
 
     setSelectedFile(data.url);
     setFormData({
       ...formData,
-      photo: file,
+      photo: data.url,
     });
   };
 
@@ -97,7 +99,7 @@ const Profile = ({ user: data }) => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Full Name"
-              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
+              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-gray-500 rounded-md"
             />
           </div>
           <div className="mb-[2rem] flex items-center gap-5">
@@ -107,7 +109,9 @@ const Profile = ({ user: data }) => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Enter Your Email"
-              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
+              aria-readonly
+              readOnly
+              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-gray-500 rounded-md"
             />
           </div>
           <div className="mb-[2rem] flex items-center gap-5">
@@ -117,7 +121,7 @@ const Profile = ({ user: data }) => {
               value={formData.password}
               onChange={handleInputChange}
               placeholder="Enter Your Password"
-              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
+              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-gray-500 rounded-md"
             />
           </div>
           <div className="mb-[2rem] flex items-center gap-5">
@@ -127,7 +131,17 @@ const Profile = ({ user: data }) => {
               value={formData.place}
               onChange={handleInputChange}
               placeholder="Enter Your location"
-              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
+              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-gray-500 rounded-md"
+            />
+          </div>
+          <div className="mb-[2rem] flex items-center gap-5">
+            <input
+              type="text"
+              name="company"
+              value={formData.company}
+              onChange={handleInputChange}
+              placeholder="Company or Club Name"
+              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-gray-500 rounded-md"
             />
           </div>
           <div className="mb-[2rem] flex items-center gap-5">
@@ -137,7 +151,7 @@ const Profile = ({ user: data }) => {
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="Enter Your Phone Number"
-              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
+              className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-gray-500 rounded-md"
             />
           </div>
           <div className="mb-5 flex items-center justify-between">
@@ -147,7 +161,7 @@ const Profile = ({ user: data }) => {
                 name="gender"
                 value={formData.gender}
                 onChange={handleInputChange}
-                className="ml-3 text-gray-500 bg-gray-50 font-semibold text-[15px] leading-7 p-4 py-2 rounded-md focus:outline-none"
+                className="ml-3 text-gray-800 bg-gray-200 font-semibold text-[15px] leading-7 p-4 py-2 rounded-md focus:outline-none"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -179,7 +193,7 @@ const Profile = ({ user: data }) => {
                 htmlFor="customFile"
                 className="absolute top-0 w-full h-full flex items-center px-[0.7rem] py-[0.3rem] text-[18px] leading-6 overflow-hidden bg-gray-200 text-black font-semibold rounded-lg truncate cursor-pointer"
               >
-                Upload photo
+                {selectedFile ? selectedFile.name : "Upload Photo"}
               </label>
             </div>
           </div>
@@ -199,3 +213,4 @@ const Profile = ({ user: data }) => {
 };
 
 export default Profile;
+

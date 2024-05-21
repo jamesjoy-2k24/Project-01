@@ -1,34 +1,36 @@
-import SignpImg from "../assets/images/signup.png";
-// import profile1 from "../assets/images/profile1.jpg";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
 import { FaUser } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa";
 import { FaLock, FaUnlock } from "react-icons/fa";
-import HashLoader from "react-spinners/ClockLoader.js";
-import uploadImage from "../utils/uploadCloudinary.js";
-// import BASE_URL from "../../config.js";
-import { toast } from "react-toastify";
-// import { FaEye } from "react-icons/fa";
-// import { FaEyeSlash } from "react-icons/fa";
+import SignpImg from "../assets/images/signup.png";
+import HashLoader from "react-spinners/HashLoader.js";
+
+import uploadImage from "../utils/uploadCloudinary";
+
 
 const Signup = () => {
-  const [selectedFile, setSelectedFile] = useState();
-  const [previewURL, setPreviewURL] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewURL, setPreviewURL] = useState("");
   const [loading, setLoading] = useState(false);
 
+
+  // Form Data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
     photo: selectedFile,
-    // gender : "",
+    gender : "",
     role: "player",
   });
 
   const navigate = useNavigate();
 
+  // Handle Change
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -36,10 +38,13 @@ const Signup = () => {
     });
   };
 
+  // Handle File Input Change
   const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
 
     const data = await uploadImage(file);
+
+    console.log(data, data.url);
 
     setPreviewURL(data.url);
     setSelectedFile(data.url);
@@ -49,6 +54,8 @@ const Signup = () => {
     });
   };
 
+
+  // Handle Submit
   const submitHandler = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -156,12 +163,14 @@ const Signup = () => {
                     name="role"
                     value={formData.role}
                     onChange={handleInputChange}
-                    className="ml-3 text-gray-500 bg-gray-50 font-semibold text-[15px] leading-7 p-4
+                    className="ml-3 text-gray-500 bg-gray-50 font-semibold text-[15px] leading-7 px-4
                 py-2 rounded-md focus:outline-none">
                     <option value="sponsor">Sponsor</option>
                     <option value="player">Player</option>
                   </select>
                 </label>
+
+                 
                 <label className="text-primaryColor font-bold text-[16px] leading-7">
                 Gender :
                 <select
@@ -170,6 +179,7 @@ const Signup = () => {
                 onChange={handleInputChange}
                 className="ml-3 text-gray-500 bg-gray-50 font-semibold text-[15px] leading-7 p-4
                 py-2 rounded-md focus:outline-none">
+                  <option value="">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
@@ -179,20 +189,19 @@ const Signup = () => {
               <div className="mb-5 flex items-center gap-3">
                 {selectedFile && (
                   <figure
-                    className="w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor
+                    className="w-[70px] h-[70px] rounded-full border-2 border-solid border-primaryColor
               flex items-center justify-center">
                     <img
                       src={previewURL}
                       alt="profile"
                       className="w-full h-full rounded-full object-cover"
                     />
-                  </figure>
+                  </figure> 
                 )}
 
                 <div className="relative w-[130px] h-[50px]">
                   <input
                     type="file"
-                    value={formData.photo}
                     name="photo"
                     id="customFile"
                     onChange={handleFileInputChange}
@@ -203,7 +212,7 @@ const Signup = () => {
                   <label
                     htmlFor="customFile"
                     className="absolute top-0 w-full h-full
-                flex items-center px-[0.7rem] py-[0.3rem] text-[18px] leading-6 overflow-hidden
+                flex items-center px-[0.7rem] py-[0.3rem] text-[16px] leading-6 overflow-hidden
                 bg-gray-200  text-black font-semibold rounded-lg truncate cursor-pointer">
                     Upload photo
                   </label>

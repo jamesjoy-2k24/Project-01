@@ -3,6 +3,7 @@ import {Link, useNavigate } from "react-router-dom";
 import { FaSmileWink } from "react-icons/fa";
 import { toast } from "react-toastify";
 import {authContext} from "../context/authContext.jsx";
+import {BASE_URL} from "../config";
 import HashLoader from "react-spinners/ClockLoader.js";
 
 const Login = () => {
@@ -27,7 +28,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:8000/api/v1/auth/login', {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ const Login = () => {
               id="email"
               value={formData.email}
               placeholder="Enter Your Email"
-              className="w-full text-center py-3 bg-[#FFFCC8] border-b border-solid border-gray-500 focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-lg cursor-pointer"
+              className="w-full text-center py-3 bg-[#FFFCC5] border-b border-solid border-gray-500 focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-lg cursor-pointer"
               onChange={handleInputChange}
               required
             />
@@ -97,7 +98,7 @@ const Login = () => {
                 value={formData.password}
                 placeholder="Enter Your Password"
                 onChange={handleInputChange}
-                className="w-full text-center py-3 bg-[#FFFCC8] border-b border-solid border-gray-500 focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor  rounded-lg cursor-pointer"
+                className="w-full text-center py-3 bg-[#FFFCC5] border-b border-solid border-gray-500 focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor  rounded-lg cursor-pointer"
                 required
               />
             </div>

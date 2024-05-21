@@ -39,7 +39,7 @@ const sponsorSchema = new mongoose.Schema({
     token: String,
     place: String,
     company: String,
-    image:[String],
+    photo:[String],
     date: {
         type: Date,
         default: Date.now

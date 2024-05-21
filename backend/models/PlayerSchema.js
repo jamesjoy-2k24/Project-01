@@ -30,15 +30,15 @@ const playerSchema = new mongoose.Schema({
     place: {
         type: String
     },
-    price: {
-        type: Number,
-    },
     date: {
         type: Date,
         default: Date.now
     },
-
+    
     // Fields for player
+    price: {
+        type: Number,
+    },
     club: {
         type: String
     },
@@ -85,9 +85,9 @@ const playerSchema = new mongoose.Schema({
         enum:["pending", "approved", "declined"],
         default: "pending"
     },
-    bookings: {
+    appointments: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Booking"
+        ref: "Appointment"
     }
 });
     
