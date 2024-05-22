@@ -1,6 +1,8 @@
 import Sponsor from "../models/SponsorSchema.js";
 import Booking from "../models/BookingSchema.js";
 import Player from "../models/PlayerSchema.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 /**
  * Update a single sponsor
@@ -12,10 +14,22 @@ export const updateSponsor = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Find and update the sponsor
     const updatedSponsor = await Sponsor.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(req.body.password, salt);
+      updatedSponsor.password = hash;
+    }
+
+    const token = jwt.sign(
+      { _id: updatedSponsor._id, role: updatedSponsor.role },
+      process.env.JWT_SECRET_KEY
+    );
+
+    updatedSponsor.token = token;
 
     // Return the updated sponsor
     res.status(200).json(updatedSponsor);

@@ -6,7 +6,7 @@ export const authenticate = async (req, res, next) => {
   const authToken = req.headers.authorization;
 
   if (!authToken || !authToken.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized: No token provided or token format is incorrect" });
   }
 
   try {
@@ -21,17 +21,19 @@ export const authenticate = async (req, res, next) => {
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return res.status(401).json({ message: "Token expired" });
+      return res.status(401).json({ message: "Unauthorized: Token expired" });
     }
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized: Invalid token" });
   }
 };
-
-
 
 export const restrict = (roles) => async (req, res, next) => {
   const userId = req.userId;
   const role = req.role;
+
+  if (!userId || !role) {
+    return res.status(401).json({ message: "Unauthorized: Missing user ID or role" });
+  }
 
   try {
     let user;
@@ -42,8 +44,12 @@ export const restrict = (roles) => async (req, res, next) => {
       user = await Player.findById(userId);
     }
 
-    if (!user || !roles.includes(user.role)) {
-      return res.status(401).json({ message: "You are not authorized" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!roles.includes(user.role)) {
+      return res.status(403).json({ message: "Forbidden: You are not authorized to access this resource" });
     }
 
     console.log('User:', user); // Log the user for debugging

@@ -1,49 +1,57 @@
 import mongoose from "mongoose";
 
-const sponsorSchema = new mongoose.Schema({
+const sponsorSchema = new mongoose.Schema(
+  {
     sponsorId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Sponsor"
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Sponsor",
     },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     nic: {
-        type: String,
+      type: String,
     },
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
+      unique: true,
+    },
+    phone: {
+      type: String,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    role:{
-        type: String,
-        default: 'sponsor'
+    role: {
+      type: String,
+      default: "sponsor",
     },
-  isApproved: {
-        type: String,
-        enum: ["pending", "approved", "declined"],
-        default: "pending"
-
-  },
-  bookings: [{
-    player: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Player"
+    isApproved: {
+      type: String,
+      enum: ["pending", "approved", "declined"],
+      default: "pending",
     },
-  }],
+    bookings: [
+      {
+        player: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Player",
+        },
+      },
+    ],
     token: String,
     place: String,
     company: String,
-    photo:[String],
+    photo: [String],
     date: {
-        type: Date,
-        default: Date.now
-    }},{timestamps: true});
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
 
-
-export default mongoose.model("Sponsor", sponsorSchema)
+export default mongoose.model("Sponsor", sponsorSchema);

@@ -13,6 +13,5 @@ router.get("/:id",getSinglePlayer);
 router.get("/", getAllPlayers);
 router.put("/:id", authenticate, restrict(["player"]), updatePlayer);
 router.delete("/:id", authenticate, restrict(["player"]), deletePlayer);
-
-router.get('/profile/me', authenticate, restrict(["player"]), getPlayerProfile) 
+router.get('/profile/me', authenticate, restrict(["player", "admin"]), getPlayerProfile) 
 export default router
