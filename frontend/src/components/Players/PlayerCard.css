@@ -1,0 +1,25 @@
+.card {
+  transition: 0.4s ease-in-out;
+  clip-path: polygon(
+    30px 0%,
+    100% 0,
+    100% calc(100% - 30px),
+    calc(100% - 30px) 100%,
+    0 100%,
+    0% 30px
+  );
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.card:hover {
+  /* Add gradient background mate black with shining */
+  transition: all 0.4s;
+  background: linear-gradient(150deg, black 0%, rgb(56, 56, 56) 100%);
+}
+
+.card .info {
+  display: block;
+  text-align: center;
+  font-size: 0.72em;
+  margin: 1em;
+}

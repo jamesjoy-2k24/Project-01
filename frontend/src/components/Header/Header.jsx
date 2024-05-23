@@ -3,8 +3,8 @@ import { NavLink, Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { authContext } from "../../context/authContext.jsx";
-import useFetchData from "../../hooks/useFetchData.jsx";
-import { BASE_URL } from "../../config";
+// import useFetchData from "../../hooks/useFetchData.jsx";
+// import { BASE_URL } from "../../config";
 
 const navLinks = [
   {
@@ -31,10 +31,9 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, role, token } = useContext(authContext);
 
-  const { data} = useFetchData(
-    `${BASE_URL}/users/profile/me`,
-  );
-  
+  // const { data } = useFetchData(
+  //   `${BASE_URL}/users/profile/me`,
+  // );
 
   const handleStickyHeader = () => {
     window.addEventListener("scroll", () => {
@@ -119,17 +118,16 @@ const Header = () => {
                   }`}>
                   <figure className="w-[35px] h-[35px] rounded-full cursor-pointer">
                     <img
-                      src={data?.photo}
-                      className="w-full h-full object-cover object-top rounded-full"
+                      src={user?.photo}
+                      className="w-full h-full object-cover rounded-full"
                     />
                   </figure>
-
                 </Link>
-                  <h1 className="font-[600] text-[18px]">{user?.name}</h1>
+                <h1 className="font-[600] text-[18px]">{user?.name}</h1>
               </div>
             ) : (
               <Link to="/login">
-                <button className="bg-primaryColor hover:opacity-80 text-whiteColor py-3 px-6 text-[16px] font-[600] h-[40px] flex items-center justify-center rounded-[50px]">
+                <button className="bg-primaryColor btn text-white py-3 px-6 text-[16px] font-[700] h-[40px] flex items-center justify-center rounded-xl">
                   Login
                 </button>
               </Link>

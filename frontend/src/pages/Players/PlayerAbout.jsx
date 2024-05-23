@@ -1,95 +1,65 @@
-import { formateDate } from "../../utils/formateDate"; 
+/* eslint-disable react/prop-types */
+import { formateDate } from "../../utils/formateDate";
 
-const PlayerAbout = () => {
+const PlayerAbout = ({ data }) => {
+  const { name, bio, place, club, sports, experiences } = data;
+
   return (
-    <div>
+    <div className="bg-white p-6 rounded-lg shadow-md">
       <div>
-        <h3 className="text-[20px] leading-[30px] text-black font-semibold flex items-center gap-2">
-          About of
-          <span className="text-primaryColor font-bold text-[24px] leading-9">
-            Ronaldo
-          </span>
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          About
+          <span className="text-primaryColor ml-2">{name}</span>
         </h3>
-        <p className="text__para text-justify text-[16px]">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae
-          culpa illum enim quis quos ducimus odio dolor architecto modi vitae
-          inventore sequi saepe, nesciunt eligendi sit iure totam, consequuntur
-          voluptatem. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Excepturi consectetur voluptates, hic dignissimos animi corporis odio,
-          dicta beatae ipsa optio dolore quaerat placeat modi voluptate,
-          praesentium tenetur ducimus repellat aliquam?
-        </p>
+        <p className="text-base text-gray-700 mb-6">{bio}</p>
       </div>
 
-      <div className="mt-12">
-        <h3 className="text-[20px] leading-[30px] text-black font-semibold">
-            Sports
-        </h3>
-
-        <ul className="pt-4 md:p-5">
-            <li className="flex flex-col sm:flex-row sm:justify-between sm:items-end md:gap-5 mb-[30px]">
-                <div>
-                    <span className="text-primaryColor font-bold text-[15px] leading-9">
-                        Football
-                    </span>
-                    <p className="text-[16px] leadin6 font-medium text-gray-800">
-                        Jeeva Club : {formateDate("2018-01-01")} - {formateDate("2022-01-01")}
-                    </p>
+      {sports && sports.length > 0 && (
+        <div className="mt-10">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Sports</h3>
+          <ul className="space-y-4">
+            {sports.map((sport, index) => (
+              <li
+                key={index}
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-100 p-4 rounded-lg shadow-sm">
+                <div className="flex flex-col">
+                  <span className="text-lg font-semibold text-gray-800">
+                    {sport}
+                  </span>
+                  <p className="text-base text-gray-600">{club}</p>
                 </div>
-                <p className="text-[14px] leading-5 font-medium text-gray-800">
-                    Address : Jeeva Club, Vavuniya, Vavuniya
+                <p className="text-sm text-gray-600 mt-2 sm:mt-0">{place}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {experiences && experiences.length > 0 && (
+        <div className="mt-12">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Experiences</h3>
+          <ul className="grid sm:grid-cols-2 gap-6">
+            {experiences.map((item, index) => (
+              <li key={index} className="p-5 bg-gray-100 rounded-lg shadow-sm">
+                <span className="text-primaryColor text-lg font-semibold">
+                  {formateDate(item.startDate)} - {formateDate(item.endDate)}
+                </span>
+                <p className="mt-2 text-base text-gray-800">
+                  <span className="text-black">Position:</span> {item.position}
                 </p>
-            </li>
-
-            
-            <li className="flex flex-col sm:flex-row sm:justify-between sm:items-end md:gap-5 mb-[30px]">
-                <div>
-                    <span className="text-primaryColor font-bold text-[15px] leading-9">
-                        Cricket
-                    </span>
-                    <p className="text-[16px] leadin6 font-medium text-gray-800">
-                        RTX Club : {formateDate("2018-01-01")} - {formateDate("2022-01-01")}
-                    </p>
-                </div>
-                <p className="text-[14px] leading-5 font-medium text-gray-800">
-                    Address : RTX Club, Colombo-3, Colombo
+                <p className="mt-1 text-base text-gray-800">
+                  <span className="text-black">Club: </span>
+                  {item.club}
                 </p>
-            </li>
-        </ul>
-      </div>
-
-
-      <div className="mt-12">
-        <h3 className="text-[20px] leading-[30px] text-black font-semibold">
-          Experiences
-        </h3>
-
-        <ul className="grid sm:grid-cols-2 gap-[30px] pt-4 md:p-5">
-          <li className="p-4 rounded bg-red-200">
-            <span className="text-primaryColor font-bold text-[15px] leading-6 ">
-              {formateDate("2018-01-01")} - {formateDate("2022-01-01")}
-            </span>
-            <p className="text-[16px] leading-6 font-medium text-gray-800">
-                  Soccer : Captain
-            </p>
-            <p className="text-[14px] leading-5 font-medium text-gray-800">
-                  Jeeva Club
-            </p>
-          </li>
-
-          <li className="p-4 rounded bg-red-200">
-            <span className="text-primaryColor font-bold text-[15px] leading-6 ">
-              {formateDate("2018-01-01")} - {formateDate("2022-01-01")}
-            </span>
-            <p className="text-[16px] leading-6 font-medium text-gray-800">
-                  Soccer : Captain
-            </p>
-            <p className="text-[14px] leading-5 font-medium text-gray-800">
-                  Jeeva Club
-            </p>
-          </li>
-        </ul>
-      </div>
+                <p className="mt-1 text-base text-gray-800">
+                  <span className="text-black">Place: </span>
+                  {item.place}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

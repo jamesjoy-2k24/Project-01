@@ -3,7 +3,7 @@ import { token } from "../config";
 
 const useFetchData = (url) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -17,15 +17,14 @@ const useFetchData = (url) => {
           },
         });
         const result = await res.json();
+        console.log("API Response:", result); // Log the entire response
 
         if (!res.ok) {
           throw new Error(result.message + " " + res.status);
         }
 
-        setData(result.data);
+        setData(result); // Directly set the result as data
         setLoading(false);
-
-        
       } catch (error) {
         setLoading(false);
         setError(error.message);
@@ -35,7 +34,7 @@ const useFetchData = (url) => {
     fetchData();
   }, [url]);
 
-  return {data, loading, error};
+  return { data, loading, error };
 };
 
 export default useFetchData;

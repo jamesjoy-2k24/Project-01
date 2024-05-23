@@ -1,40 +1,53 @@
 /* eslint-disable react/prop-types */
-import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
+import "./PlayerCard.css";
 
 const PlayerCard = ({ player }) => {
-  return (
-    <div className="w-full max-w-[320px] mx-auto bg-white shadow-lg hover:shadow-primaryColor hover:shadow-sm rounded-lg overflow-hidden transform transition-transform hover:scale-105 duration-300">
-      <img
-        className="w-full h-48 object-cover text-center mt-[1rem]"
-        src={player.image}
-        alt={`${player.name}`}
-      />
+  const { photo, name, age, sports, averageRating, reviews, _id } = player;
 
-      <div className="p-6 h-64 flex flex-col justify-between">
+  return (
+    <div>
+      <div className="card w-[18em] h-[25em] bg-[#171717] flex flex-col hover:transform shadow-panelShadow hover:scale-105 transition-transform duration-300 ease-in-out">
+        <div className="w-[7em] h-[7em] rounded-[20px] border-2 border-primaryColor m-auto">
+          <img
+            src={photo}
+            alt={name}
+            className="w-full h-full object-cover rounded-[20px]"
+          />
+        </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{player.name}</h2>
-          <p className="text-gray-700 mt-2">{player.position}</p>
-          <p className="text-gray-700 mt-2">{player.experience}</p>
-          <p className="text-gray-700 mt-2">{player.skills[0]}</p>
-          
-        </div>
-        <div className="flex items-center mt-4">
-          <div className="flex items-center">
-            <FaStar className="text-yellow-500" />
-            <FaStar className="text-yellow-500" />
-            <FaStar className="text-yellow-500" />
-            <FaStar className="text-yellow-500" />
-            <FaStar className="text-gray-400" />
-          </div>
-          <span className="ml-2 text-gray-600">{player.rating}</span>
-        </div>
-        <div className="mt-4 flex justify-center items-center">
-          <span className="text-xl font-semibold text-gray-900">
-            {player.team}
+          <span className="text-white font-bold text-center block text-[1.2rem]">
+            {name}
           </span>
-          <Link to={`/player/${player.id}`}>
-            <button className="border border-solid border-primaryColor text-black mx-auto hover:text-white hover:bg-primaryColor font-bold py-2 px-4 rounded transition-colors duration-300">
+          {/* <span className="text-gray-300 font-bold text-center block text-[0.9rem]">
+          {place}
+        </span> */}
+          <span className="text-gray-300 font-bold text-center block text-[0.9rem] mb-2">
+            Age: {age}
+          </span>
+        </div>
+        <div className="mt-1">
+          <p className="info">
+            {sports.map((sport, index) => (
+              <span
+                key={index}
+                className="bg-[#363636] rounded-2xl p-[7px] text-white font-bold ml-2 mr-1">
+                {index > 0 && " "} {sport}{" "}
+              </span>
+            ))}
+          </p>
+        </div>
+        <div>
+          <div className="flex justify-center items-center mt-2 ">
+            <FaStar className="text-yellow-400" />
+            <span className="text-white font-bold text-center block text-[0.8rem] ml-2">
+              {averageRating} / 5{" "}
+              <span className="ml-2">({reviews.length})</span>
+            </span>
+          </div>
+          <Link to={`/players/${_id}`}>
+            <button className="mb-4 mt-4 py-2 px-4 block m-auto rounded-[20px] border-none font-bold bg-white text-black hover:bg-primaryColor hover:text-white hover:cursor-pointer transition-all hover:duration-200 ease-in-out">
               View Profile
             </button>
           </Link>

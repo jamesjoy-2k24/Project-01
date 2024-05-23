@@ -3,10 +3,11 @@
 import { useReducer, createContext, useEffect } from "react";
 
 const initialState = {
-
-  user : localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null,
-  role : localStorage.getItem("role") ? localStorage.getItem("role") : null,
-  token : localStorage.getItem("token") ? localStorage.getItem("token") : null,
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null,
+  role: localStorage.getItem("role") || null,
+  token: localStorage.getItem("token") || null,
 };
 
 export const authContext = createContext(initialState);
@@ -48,6 +49,17 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.setItem("token", state.token);
   }, [state]);
 
+  const logout = () => {
+    // Clear localStorage
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    // Force reload to ensure all cached data is cleared
+    window.location.reload(true);
+    // Dispatch logout action
+    dispatch({ type: "LOGOUT" });
+  };
+
   return (
     <authContext.Provider
       value={{
@@ -55,8 +67,8 @@ export const AuthContextProvider = ({ children }) => {
         role: state.role,
         token: state.token,
         dispatch,
-      }}
-    >
+        logout, // Pass logout function in the context value
+      }}>
       {children}
     </authContext.Provider>
   );

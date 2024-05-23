@@ -1,21 +1,16 @@
 @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-  .animate-fade-in {
-    animation: fadeIn 2s ease-out forwards;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  .offer .skew-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: #facc15; 
-    z-index: 0;
-    transform: skewX(-3deg) skewY(-3deg);
-  }
+}
+.animate-fade-in {
+  animation: fadeIn 2s ease-out forwards;
+}
+.animated-fade-in {
+  animation: fadeIn 2s ease-out;
+}

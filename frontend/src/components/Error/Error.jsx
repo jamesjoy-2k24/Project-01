@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-const Error = ({errMessage}) => {
-    return (
-        <div className="text-center">
-            <h2 className="text-5xl font-bold text-red-500">{errMessage}</h2>
-        </div>
-    );
+const Error = ({ message }) => {
+  return (
+    <div className="text-center">
+      <h2 className="text-5xl font-bold text-primaryColor">{message}</h2>
+    </div>
+  );
 };
 
-export default Error
+export default Error;

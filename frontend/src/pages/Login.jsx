@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
-import {Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSmileWink } from "react-icons/fa";
 import { toast } from "react-toastify";
-import {authContext} from "../context/authContext.jsx";
-import {BASE_URL} from "../config";
-import HashLoader from "react-spinners/ClockLoader.js";
+import { authContext } from "../context/authContext.jsx";
+import { BASE_URL } from "../config";
+import HashLoader from "react-spinners/HashLoader.js";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -12,9 +12,9 @@ const Login = () => {
     password: "",
   });
 
-  const[loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {dispatch} = useContext(authContext);
+  const { dispatch } = useContext(authContext);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -29,9 +29,9 @@ const Login = () => {
 
     try {
       const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -42,27 +42,31 @@ const Login = () => {
         throw new Error(result.message);
       }
 
-      dispatch({type: "LOGIN_SUCCESS", payload:{
-        user: result.user,
-        role: result.role,
-        token: result.token
-      }});
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: {
+          user: result.user,
+          role: result.role,
+          token: result.token,
+        },
+      });
+      toast.success("Welcome Back!");
 
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("role", result.role);
-
       localStorage.setItem("token", result.token);
-      console.log(result, 'login data');
+      // console.log(result, 'login data');
 
+      setFormData({ email: "", password: "" });
       setLoading(false);
 
-      if(result.role === "player"){
+      if (result.role === "player") {
         navigate("/players/profile/me");
-      }else if(result.role === "sponsor"){
+        window.location.reload(true);
+      } else if (result.role === "sponsor") {
         navigate("/users/profile/me");
+        window.location.reload(true);
       }
-
-      toast.success("Welcome Back!");
     } catch (error) {
       setLoading(false);
       toast.error(error.message, "Some thing went wrong");
@@ -89,36 +93,34 @@ const Login = () => {
               onChange={handleInputChange}
               required
             />
-            </div>
+          </div>
 
-            <div className="mb-[2rem]">
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                placeholder="Enter Your Password"
-                onChange={handleInputChange}
-                className="w-full text-center py-3 bg-[#FFFCC5] border-b border-solid border-gray-500 focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor  rounded-lg cursor-pointer"
-                required
-              />
-            </div>
+          <div className="mb-[2rem]">
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              placeholder="Enter Your Password"
+              onChange={handleInputChange}
+              className="w-full text-center py-3 bg-[#FFFCC5] border-b border-solid border-gray-500 focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor  rounded-lg cursor-pointer"
+              required
+            />
+          </div>
 
-            <div className="mt-7">
-              <button 
-                type="submit"
-                className="w-full bg-primaryColor text-white px-4 py-3 text-[22px] font-semibold rounded-lg"
-              >
-                {loading ? <HashLoader size={25} color="white" /> : 'Login'}
-              </button>
-            </div>
+          <div className="mt-7">
+            <button
+              type="submit"
+              className="w-full bg-primaryColor text-white px-4 py-3 text-[22px] font-semibold rounded-lg">
+              {loading ? <HashLoader size={25} color="white" /> : "Login"}
+            </button>
+          </div>
 
-            <p className="mt-5 text-gray-500 text-center">
-              Don&apos;t have an account?{" "}
-              <Link to="/Signup" className="text-primaryColor font-medium ml-1">
-                Register
-              </Link>
-            </p>
-          
+          <p className="mt-5 text-gray-500 text-center">
+            Don&apos;t have an account?{" "}
+            <Link to="/Signup" className="text-primaryColor font-medium ml-1">
+              Register
+            </Link>
+          </p>
         </form>
       </div>
     </section>
