@@ -122,34 +122,29 @@ export const getPlayerProfile = async (req, res) => {
   console.log(`Received ID: ${playerId}`);
 
   try {
-    const player = await Player.findById(playerId).populate({
-      path: "appointments",
-      select: "-password",
-      populate: {
-        path: "player",
-        select: "-password",
-      },
-    });
-
-    // Debug: Log the player object to see what is retrieved
-    // console.log(`Player object retrieved: ${JSON.stringify(player)}`);
+    const player = await Player.findById(playerId);
 
     if (!player) {
       // Player not found
       return res.status(404).json({ message: "Player not found" });
     }
 
+    const { password, ...rest } = player._doc;
+    const appointments = await Booking.find({ player: playerId });
+
     // Success response
     res.status(200).json({
       success: true,
       message: "Player profile retrieved successfully",
-      data: player,
+      data: { ...rest, appointments },
     });
   } catch (error) {
     // Log the error to the console
     console.error(`Error retrieving player profile: ${error.message}`);
-    
+
     // Error response
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };

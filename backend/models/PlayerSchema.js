@@ -46,6 +46,9 @@ const playerSchema = new mongoose.Schema({
   club: {
     type: [String],
   },
+  team: {
+    type: String,
+  },
   sports: {
     type: [String],
   },
@@ -59,7 +62,7 @@ const playerSchema = new mongoose.Schema({
     type: Number,
   },
   experiences: {
-    type: [Array],
+    type: Array,
   },
   about: {
     type: String,
@@ -70,7 +73,7 @@ const playerSchema = new mongoose.Schema({
       ref: "Review",
     },
   ],
-  ratings: [
+  rating: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Rating",
@@ -88,6 +91,14 @@ const playerSchema = new mongoose.Schema({
     type: String,
     enum: ["pending", "approved", "declined"],
     default: "pending",
+  },
+  available: {
+    type: Boolean,
+    default: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
   token: String,
   appointments: {

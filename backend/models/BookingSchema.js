@@ -2,22 +2,20 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
-    player: {
+    playerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Player",
-      required: true,
     },
-    sponsor: {
+    sponsorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Sponsor",
-      required: true,
     },
     price: {
       type: String,
       required: true,
     },
-    appointmentDate: {
-      type: Date,
+    sessionId: {
+      type: String,
       required: true,
     },
     date: {
@@ -38,5 +36,19 @@ const bookingSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// bookingSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: "player",
+//     select: "name",
+//     error: (err) => {
+//       throw new Error(
+//         "Cannot read properties of undefined (reading 'id')",
+//         err
+//       );
+//     },
+//   });
+//   next();
+// });
 
 export default mongoose.model("Booking", bookingSchema);

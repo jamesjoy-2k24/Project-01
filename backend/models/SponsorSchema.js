@@ -4,7 +4,6 @@ const sponsorSchema = new mongoose.Schema(
   {
     sponsorId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Sponsor",
     },
     name: {
       type: String,
@@ -29,12 +28,32 @@ const sponsorSchema = new mongoose.Schema(
       type: String,
       default: "sponsor",
     },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
     isApproved: {
       type: String,
       enum: ["pending", "approved", "declined"],
       default: "pending",
     },
-    bookings: [
+    // reviews: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Review",
+    //   },
+    // ],
+    // rating: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Rating",
+    //   },
+    // ],
+    appointments: [
       {
         player: {
           type: mongoose.Schema.Types.ObjectId,

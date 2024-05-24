@@ -1,12 +1,15 @@
 import jwt from "jsonwebtoken";
 import Player from "../models/PlayerSchema.js";
 import Sponsor from "../models/SponsorSchema.js";
+import Admin from "../models/AdminSchema.js";
 
 export const authenticate = async (req, res, next) => {
   const authToken = req.headers.authorization;
 
   if (!authToken || !authToken.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized: No token provided or token format is incorrect" });
+    return res.status(401).json({
+      message: "Unauthorized: No token provided or token format is incorrect",
+    });
   }
 
   try {
@@ -16,7 +19,7 @@ export const authenticate = async (req, res, next) => {
     req.userId = decoded.id;
     req.role = decoded.role;
 
-    console.log('Decoded token:', decoded); // Log decoded token
+    console.log("Decoded token:", decoded); // Log decoded token
 
     next();
   } catch (error) {
@@ -32,13 +35,17 @@ export const restrict = (roles) => async (req, res, next) => {
   const role = req.role;
 
   if (!userId || !role) {
-    return res.status(401).json({ message: "Unauthorized: Missing user ID or role" });
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Missing user ID or role" });
   }
 
   try {
     let user;
 
-    if (role === "sponsor") {
+    if (role === "admin") {
+      user = await Admin.findById(userId);
+    } else if (role === "sponsor") {
       user = await Sponsor.findById(userId);
     } else if (role === "player") {
       user = await Player.findById(userId);
@@ -49,14 +56,16 @@ export const restrict = (roles) => async (req, res, next) => {
     }
 
     if (!roles.includes(user.role)) {
-      return res.status(403).json({ message: "Forbidden: You are not authorized to access this resource" });
+      return res.status(403).json({
+        message: "Forbidden: You are not authorized to access this resource",
+      });
     }
 
-    console.log('User:', user); // Log the user for debugging
+    console.log("User:", user); // Log the user for debugging
 
     next();
   } catch (error) {
-    console.error('Error in role restriction:', error);
+    console.error("Error in role restriction:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

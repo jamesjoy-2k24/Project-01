@@ -88,12 +88,13 @@ export const getSingleSponsor = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const getAllSponsors = async (req, res) => {
+  const { id } = req.params;
   try {
     // Find all sponsors
-    const allSponsors = await Sponsor.find().select("-password");
+    const sponsors = await Sponsor.find().select("-password");
 
     // Return all sponsors
-    res.status(200).json(allSponsors);
+    res.status(200).json(sponsors);
   } catch (error) {
     // Return the error
     res.status(500).json(error);
@@ -113,16 +114,17 @@ export const getSponsorProfile = async (req, res) => {
       });
     }
 
-    const {password, ...others} = sponsor._doc
+    const { password, ...others } = sponsor._doc;
 
     res.status(200).json({
       success: true,
       message: "Sponsor profile retrieved successfully",
       data: {
-        ...others},
+        ...others,
+      },
     });
   } catch (error) {
-    console.error('Error retrieving sponsor profile:', error);
+    console.error("Error retrieving sponsor profile:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -131,11 +133,10 @@ export const getSponsorProfile = async (req, res) => {
   }
 };
 
-
 export const getMyAppointments = async (req, res) => {
   try {
     // Retrive appointments from booking
-    const bookings = await Booking.find({ user: req.sponsorId });
+    const bookings = await Booking.find({ sponsor: req.sponsorId });
 
     // extract player ids from appointment booking
     const playerIds = bookings.map((el) => el.player.id);
@@ -151,8 +152,9 @@ export const getMyAppointments = async (req, res) => {
       data: players,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };
