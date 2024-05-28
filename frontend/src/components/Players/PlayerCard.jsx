@@ -1,14 +1,32 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import { BASE_URL } from "../../config";
+import { useEffect, useState } from "react";
 import "./PlayerCard.css";
 
 const PlayerCard = ({ player }) => {
-  const { photo, name, age, sports, averageRating, reviews, _id } = player;
+  const { photo, name, age, sports = [], _id } = player;
+
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/reviews/${_id}/reviews`);
+        const data = await response.json();
+        setReviews(data.reviews);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchReviews();
+  }, [_id]);
+ 
 
   return (
-    <div>
-      <div className="card w-[18em] h-[25em] bg-[#171717] flex flex-col hover:transform shadow-panelShadow hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div className=" shadow-lg shadow-black bg-primaryColor rounded-r-md rounded-bl-md hover:scale-105 transition-all duration-500 hover:shadow-xl hover:shadow-black">
+      <div className="card w-[18em] h-[25em] bg-[#171717] flex flex-col rounded-r-md rounded-bl-md ">
         <div className="w-[7em] h-[7em] rounded-[20px] border-2 border-primaryColor m-auto">
           <img
             src={photo}
@@ -18,11 +36,8 @@ const PlayerCard = ({ player }) => {
         </div>
         <div>
           <span className="text-white font-bold text-center block text-[1.2rem]">
-            {name}
+            {name.charAt(0).toUpperCase() + name.slice(1)}
           </span>
-          {/* <span className="text-gray-300 font-bold text-center block text-[0.9rem]">
-          {place}
-        </span> */}
           <span className="text-gray-300 font-bold text-center block text-[0.9rem] mb-2">
             Age: {age}
           </span>
@@ -42,12 +57,19 @@ const PlayerCard = ({ player }) => {
           <div className="flex justify-center items-center mt-2 ">
             <FaStar className="text-yellow-400" />
             <span className="text-white font-bold text-center block text-[0.8rem] ml-2">
-              {averageRating} / 5{" "}
-              <span className="ml-2">({reviews.length})</span>
+              
+             ( {reviews.length > 0
+                ? Number(reviews.reduce((total, review) => total + review.rating, 0) /
+                    reviews.length
+                      .toFixed(2)
+                ).toFixed(2)
+                : 0}) 
+                <span className="ml-2">{reviews.length} {" "}</span>
+
             </span>
           </div>
           <Link to={`/players/${_id}`}>
-            <button className="mb-4 mt-4 py-2 px-4 block m-auto rounded-[20px] border-none font-bold bg-white text-black hover:bg-primaryColor hover:text-white hover:cursor-pointer transition-all hover:duration-200 ease-in-out">
+            <button className="mb-4 mt-4 py-2 px-4 block m-auto rounded-[20px] border-none font-bold text-white shadow-md shadow-white hover:bg-primaryColor transition-all duration-300">
               View Profile
             </button>
           </Link>

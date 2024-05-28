@@ -3,28 +3,25 @@ import Loader from "../../components/Loader/Loading";
 import Error from "../../components/Error/Error";
 import Tabs from "./Tabs";
 import useFetchData from "../../hooks/useFetchData";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { BASE_URL } from "../../config";
 import { FaStar } from "react-icons/fa";
 import PlayerAbout from "../../pages/Players/PlayerAbout";
 import Profile from "./Profile";
-import Appointments from "./Appointments";
+import Bookings from "./Bookings.jsx";
 
 const Dashboard = () => {
-  const {
-    data: responseData,
-    loading,
-    error,
-  } = useFetchData(`${BASE_URL}/players/profile/me`);
   const [tab, setTab] = useState("overview");
+
+  const { data: player, loading, error } = useFetchData(`${BASE_URL}/players/profile/me/`);
 
   if (loading) return <Loader />;
   if (error) return <Error errMessage={error} />;
-  if (!responseData) return null;
+  
+  // console.log(player);
+  if (!player) return null;
 
-  console.log(responseData);
-
-  const { success, message, data } = responseData;
 
   return (
     <section>
@@ -32,9 +29,9 @@ const Dashboard = () => {
         <div className="grid lg:grid-cols-3 gap-[30px] lg:gap-[60px]">
           <Tabs tab={tab} setTab={setTab} />
           <div className="lg:col-span-2">
-            {success && (
+            {player && (
               <div>
-                {data.isApproved === "pending" && (
+                {player.isApproved === "pending" && (
                   <div className="flex items-center p-4 mb-4 text-yellow-700 bg-yellow-50 rounded-lg">
                     <svg
                       aria-hidden="true"
@@ -64,41 +61,41 @@ const Dashboard = () => {
                   <div className="flex items-center gap-4 mb-10">
                     <figure className="max-w-[200px] max-h-[200px]">
                       <img
-                        src={data.photo}
+                        src={player.photo}
                         alt="Profile"
                         className="w-[200px] h-[200px] object-cover rounded-lg"
                       />
                     </figure>
                     <div>
                       <span className="bg-[#CCF0F3] text-blue-700 py-1 px-4 lg:py-2 lg:px-6 rounded text-[10px] md:text-[12px] leading-4 lg:text-[16px] lg:leading-6 font-semibold">
-                        {data.role}
+                        {player.role}
                       </span>
 
                       <h3 className="text-[22px] leading-9 font-bold text-black mt-3">
-                        Mr.{data.name}
+                        Mr.{player.name}
                       </h3>
                       <div className="flex items-center gap-[6px]">
                         <span className="flex items-center gap-[6px] text-black text-[14px] leading-5 lg:text-[16px] lg:leading-6 font-semibold">
                           <FaStar className="text-[#ffc518]" />
-                          {data.averageRating}
+                          {player.averageRating}
                         </span>
                         <span className="text-gray-700 text-[14px] leading-5 lg:text-[16px] lg:leading-6 font-semibold">
-                          ({data.totalRatings}) Ratings
+                          ({player.totalRatings}) Ratings
                         </span>
                       </div>
                       <p className="text__para font-[15px] lg:max-w-[398px] leading-6">
-                        {data.bio}
+                        {player.bio}
                       </p>
                     </div>
                   </div>
-                  {/* Make sure to pass `data` to child components */}
-                  <PlayerAbout data={data} />
+                  {/* Make sure to pass `player` to child components */}
+                  <PlayerAbout player={player} />
                 </div>
               )}
               {tab === "appointments" && (
-                <Appointments appointments={data.appointments} />
+                <Bookings />
               )}
-              {tab === "settings" && <Profile data={data} />}
+              {tab === "settings" && <Profile player={player} />}
             </div>
           </div>
         </div>

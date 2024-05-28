@@ -3,8 +3,6 @@ import { NavLink, Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { authContext } from "../../context/authContext.jsx";
-// import useFetchData from "../../hooks/useFetchData.jsx";
-// import { BASE_URL } from "../../config";
 
 const navLinks = [
   {
@@ -31,19 +29,20 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, role, token } = useContext(authContext);
 
-  // const { data } = useFetchData(
-  //   `${BASE_URL}/users/profile/me`,
-  // );
+  const { name, photo } = user || {};
 
   const handleStickyHeader = () => {
     window.addEventListener("scroll", () => {
-      if (
-        document.body.scrollTop > 80 ||
-        document.documentElement.scrollTop > 80
-      ) {
-        headerRef.current.classList.add("sticky__header");
-      } else {
-        headerRef.current.classList.remove("sticky__header");
+      const currentHeader = headerRef.current;
+      if (currentHeader) {
+        if (
+          document.body.scrollTop > 80 ||
+          document.documentElement.scrollTop > 80
+        ) {
+          currentHeader.classList.add("sticky__header");
+        } else {
+          currentHeader.classList.remove("sticky__header");
+        }
       }
     });
     return () => {
@@ -113,17 +112,19 @@ const Header = () => {
                 <Link
                   to={`${
                     role === "player"
-                      ? "/players/profile/me"
+                      ? "/players/profile/me/"
+                      : role === "admin"
+                      ? "/admin/dashboard"
                       : "/users/profile/me"
                   }`}>
                   <figure className="w-[35px] h-[35px] rounded-full cursor-pointer">
                     <img
-                      src={user?.photo}
+                      src={photo}
                       className="w-full h-full object-cover rounded-full"
                     />
                   </figure>
                 </Link>
-                <h1 className="font-[600] text-[18px]">{user?.name}</h1>
+                <h1 className="font-[600] text-[18px]">{name}</h1>
               </div>
             ) : (
               <Link to="/login">

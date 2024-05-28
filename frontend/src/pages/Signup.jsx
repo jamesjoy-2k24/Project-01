@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaPhone } from "react-icons/fa";
 import { FaEnvelope } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
+import { BASE_URL } from "../config";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import SignpImg from "../assets/images/signup.png";
 import HashLoader from "react-spinners/HashLoader.js";
@@ -18,6 +19,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
     showPassword: false,
     confirmPassword: "",
@@ -34,10 +36,21 @@ const Signup = () => {
     const errors = {};
 
     // Validate Name
-    if (formData.name.trim() === "") {
-      errors.name = "Name is required";
+    if (
+      formData.name.trim().charAt(0).toUpperCase() !==
+        formData.name.trim().charAt(0) ||
+      formData.name.trim() === ""
+    ) {
+      errors.name = "Name should start with capital letter and is required";
     }
     toast.error(errors.name);
+
+    // Validate Phone
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      errors.phone = "Invalid phone number";
+    }
+    toast.error(errors.phone);
 
     // Validate Email
     const emailRegex =
@@ -119,13 +132,13 @@ const Signup = () => {
     const errors = validateFormData();
 
     if (Object.keys(errors).length > 0) {
-      toast.error("Please fix the errors in the form");
+      toast.error("Please fill the form correctly !");
       setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:8000/api/v1/auth/register", {
+      const res = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -149,8 +162,8 @@ const Signup = () => {
   };
 
   return (
-    <section className="px-5 xl:px-0">
-      <div className="max-w-[1170px] mx-auto">
+    <section className="px-5 xl:px-0 p-3">
+      <div className="max-w-[1170px] mx-auto ">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* =========Signup Image======== */}
           <div className="hidden lg:flex items-center rounded-l-lg">
@@ -191,6 +204,18 @@ const Signup = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Enter Your Email"
+                  className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
+                  required
+                />
+              </div>
+              <div className="mb-[2rem] flex items-center gap-5">
+                <FaPhone className="text-primaryColor text-[20px] rotate-90" />
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Enter Your Phone Number"
                   className="w-full py-3 px-5 border-b border-solid border-gray-500 bg-[#FFFCC8] focus:outline-none focus:border-b-primaryColor text-[18px] leading-7 text-black placeholder:text-grayColor rounded-md"
                   required
                 />

@@ -9,6 +9,8 @@ import Contactimg from "../assets/images/contact.jpg";
 import About from "../components/About/About";
 import "./Home.css";
 import FaqList from "../components/Faq/FaqList";
+import UseFetchData from "../hooks/useFetchData";
+import { BASE_URL } from "../config";
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -16,6 +18,16 @@ const scrollToTop = () => {
 
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
+
+  const { data: players } = UseFetchData(`${BASE_URL}/players`);
+
+  // Get sponsor total count
+  // const sponsorCount = sponsors ? sponsors.length : 0;
+  // console.log("sponsorCount", sponsorCount);
+
+  // Get player total count
+  const playerCount = players ? players.length : 0;
+  console.log("playerCount", playerCount);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,18 +73,20 @@ const Home = () => {
               <div className="mt-[30px] lg:mt-[70px] flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-[30px]">
                 <div className="flex flex-col items-center gap-3 text-center">
                   <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px] rounded-[10px] text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
-                    30+
+                    {playerCount}+
                   </h1>
-                  <p className="text__para text-whiteColor font-[500]">Clubs</p>
+                  <p className="text__para text-whiteColor font-[500]">
+                    Active Players
+                  </p>
                   <p className="">⭐⭐⭐</p>
                 </div>
 
                 <div className="flex flex-col items-center gap-3 text-center">
                   <h1 className="text-[36px] leading-[56px] lg:text-[45px] lg:leading-[56px] rounded-[10px] text-black font-[800] border-x-2 bg-white p-1 w-[140px]">
-                    80+
+                    100+
                   </h1>
                   <p className="text__para text-whiteColor font-[500]">
-                    Active Players
+                    Active Sponsors
                   </p>
                   <p className="">⭐⭐⭐⭐</p>
                 </div>

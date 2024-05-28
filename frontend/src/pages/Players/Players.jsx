@@ -9,10 +9,16 @@ import Error from "../../components/Error/Error";
 
 const Players = () => {
   const [searchTerm, setSearchTerm] = useState("");
+
   const { data: players, loading, error } = useFetchData(`${BASE_URL}/players`);
 
+  //  Null statement debug
+  if (!players) {
+    return null;
+  }
+
   // Develop search functionality
-  const filteredPlayers = players?.filter((player) => {
+  const filteredPlayers = players.filter((player) => {
     return (
       player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       player.sports.some((sport) =>
@@ -24,6 +30,7 @@ const Players = () => {
 
   if (loading) return <Loader />;
   if (error) return <Error />;
+ 
 
   return (
     <>
@@ -40,7 +47,7 @@ const Players = () => {
               placeholder="Search Players by names or sports...."
             />
             <BsFilterLeft className="mr-[10rem] text-[3rem] text-primaryColor font-semibold" />
-            <button className="bg-primaryColor text-white px-8 py-4 right-0 absolute  rounded-r-md mt-0">
+            <button className="bg-primaryColor text-white px-8 py-4 right-0 absolute rounded-r-md mt-0">
               <span className="text-[19px] text-[700]">Search</span>
             </button>
           </div>
@@ -50,7 +57,7 @@ const Players = () => {
       <section>
         <div className="container">
           <div className="flex flex-wrap justify-center gap-6">
-            {filteredPlayers?.map((player) => (
+            {filteredPlayers.map((player) => (
               <PlayerCard key={player._id} player={player} />
             ))}
           </div>

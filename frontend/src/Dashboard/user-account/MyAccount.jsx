@@ -11,7 +11,7 @@ const MyAccount = () => {
   const { dispatch } = useContext(authContext);
   const [tab, setTab] = useState("bookings");
   const {
-    data: responseData,
+    data: sponsor,
     loading,
     error,
   } = useFetchData(`${BASE_URL}/users/profile/me`);
@@ -22,9 +22,8 @@ const MyAccount = () => {
 
   if (loading) return <Loading />;
   if (error) return <Error errMessage={error} />;
-  if (!responseData) return null;
+  if (!sponsor) return null;
 
-  const { data } = responseData;
 
   return (
     <section>
@@ -34,7 +33,7 @@ const MyAccount = () => {
             <div className="flex items-center justify-center">
               <figure className="w-[100px] h-[100px] rounded-full border-2 border-solid border-primaryColor">
                 <img
-                  src={data?.photo || "https://via.placeholder.com/150"}
+                  src={sponsor?.photo || "https://via.placeholder.com/150"}
                   alt="user"
                   className="w-full h-full rounded-full object-cover"
                   onError={(e) =>
@@ -46,23 +45,23 @@ const MyAccount = () => {
 
             <div className="text-center mt-4">
               <h3 className="text-[18px] leading-[30px] text-black font-bold">
-                {data?.name || "User"}
+                {sponsor?.name || "User"}
               </h3>
               <p className="text-gray-800 text-[16px] leading-6 font-medium">
-                {data?.email || "user@gmail.com"}
+                {sponsor?.email || "user@gmail.com"}
               </p>
               <p className="text-gray-800 text-[16px] leading-6 font-medium">
-                {data?.role || "Sponsor"}
+                {sponsor?.role || "Sponsor"}
               </p>
 
               <p className="text-gray-800 text-[15px] leading-6 font-medium">
-                I am live in {data?.place || "N/A"}
+                I am live in {sponsor?.place || "N/A"}
               </p>
             </div>
 
             <div className="mt-[30px] md:mt-[80px]">
               <button
-                className="btn hover:text-blue-700 hover:opacity-100 duration-200 transition-all ease-in bg-black mb-[2rem] w-full p-3 text-[16px] leading-7 rounded-md"
+                className="btn hover:text-blue-700 hover:bg-black hover:opacity-100 duration-200 transition-all ease-in bg-black mb-[2rem] w-full p-3 text-[16px] leading-7 rounded-md"
                 onClick={handleLogout}>
                 Logout
               </button>
@@ -90,8 +89,10 @@ const MyAccount = () => {
               </button>
             </div>
 
-            {tab === "bookings" && <MyBookings />}
-            {tab === "settings" && <Profile user={data} />}
+            {tab === "bookings" && (
+              <MyBookings  />
+            )}
+            {tab === "settings" && <Profile user={sponsor} />}
           </div>
         </div>
       </div>

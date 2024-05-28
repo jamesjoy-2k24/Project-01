@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import PlayerAbout from "./PlayerAbout";
@@ -11,7 +11,17 @@ import Error from "../../components/Error/Error";
 
 const PlayerDetails = () => {
   const [tab, setTab] = useState("about");
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    if (headerRef.current) {
+      console.log(headerRef.current); // Just an example of accessing the ref
+    }
+  }, []);
+
   const { id } = useParams();
+  const sponsorId = localStorage.getItem("user");
+  const [Review, setReview] = useState(0);
 
   const {
     data: player,
@@ -19,24 +29,35 @@ const PlayerDetails = () => {
     error,
   } = useFetchData(`${BASE_URL}/players/${id}`);
 
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/reviews/${id}/reviews`);
+        const data = await response.json();
+        await setReview(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchReviews();
+  }, [id]);
+
+  const review = Review?.reviews?.length > 0 ? Review?.reviews?.length : 0;
+
   if (loading) return <Loader />;
   if (error) return <Error message={error} />;
 
   if (!player) {
-    return <Error message="Player data not found" />;
+    return null;
   }
 
   const {
-    name,
-    bio,
-    photo,
-    sports,
-    averageRating,
-    reviews,
-    // place,
+    name = "Unknown Player",
+    photo = "",
+    bio = "No bio available",
+    sports = [],
+    age = "Unknown",
   } = player;
-
-  console.log("Player data:", reviews);
 
   return (
     <section>
@@ -53,23 +74,33 @@ const PlayerDetails = () => {
               </figure>
 
               <div>
-                <span className="flex mx-auto lg:flex-none text-black text-[12px] ">
-                  {sports.map((sport, index) => (
-                    <span
-                      key={index}
-                      className="rounded-md py-2 px-3 lg:py-2 lg:px-6  leading-4 lg:text-[16px] lg:leading-5 mr-3 bg-gray-200 font-bold">
-                      {index > 0 && " "} {sport}
+                <span className="flex mx-auto lg:flex-none text-black text-[12px]">
+                  {sports.length > 0 ? (
+                    sports.map((sport, index) => (
+                      <span
+                        key={index}
+                        className="rounded-md py-2 px-3 lg:py-2 lg:px-6 leading-4 lg:text-[16px] lg:leading-5 mr-3 bg-gray-200 font-bold">
+                        {index > 0 && " "} {sport}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="rounded-md py-2 px-3 lg:py-2 lg:px-6 leading-4 lg:text-[16px] lg:leading-5 mr-3 bg-gray-200 font-bold">
+                      No sports listed
                     </span>
-                  ))}
+                  )}
                 </span>
 
-                <h2 className="heading text-black text-[24px] leading-9 mt-3 font-bold">
+                <h2
+                  ref={headerRef}
+                  className="heading text-black text-[24px] leading-9 mt-3 font-bold">
                   {name}
                 </h2>
+                <p className="text__para text-[14px] leading-6">Age: {age}</p>
                 <div className="flex items-center gap-[6px]">
                   <span className="flex items-center gap-[6px] text-[14px] leading-5 lg:text-[16px] lg:leading-7 text-black font-semibold">
-                    <FaStar className="text-yellow-500" /> {averageRating}{" "}
-                    <span className="text-gray-500">({reviews?.length})</span>
+                    <FaStar className="text-yellow-500" />
+                    {Review.averageRating}/5
+                    <span className="text-gray-500">({review}) Reviews</span>
                   </span>
                 </div>
                 <p className="text__para text-[14px] leading-6 md:text-[15px] lg:max-w-[380px] text-justify">
@@ -101,13 +132,19 @@ const PlayerDetails = () => {
             </div>
 
             <div className="mt-[50px]">
-              {tab === "about" && <PlayerAbout data={player} />}
-              {tab === "feedback" && <Feedback reviews={reviews} />}
+              {tab === "about" && <PlayerAbout player={player} />}
+              {tab === "feedback" && <Feedback player={player} />}
             </div>
           </div>
 
           <div>
-            <SidePanel playerId={player._id} price={player.price} />
+            <SidePanel
+              player={player}
+              sponsor={sponsorId}
+              playerId={id}
+              price={player.price}
+              available={player.available}
+            />
           </div>
         </div>
       </div>

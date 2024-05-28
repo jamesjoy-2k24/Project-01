@@ -16,18 +16,18 @@ const useFetchData = (url) => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const result = await res.json();
-        console.log("API Response:", result); // Log the entire response
 
         if (!res.ok) {
-          throw new Error(result.message + " " + res.status);
+          throw new Error(result.message || "Error fetching data");
         }
 
-        setData(result); // Directly set the result as data
-        setLoading(false);
+        setData(result.data); // Ensure this sets the correct field, usually `data`
       } catch (error) {
-        setLoading(false);
         setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 

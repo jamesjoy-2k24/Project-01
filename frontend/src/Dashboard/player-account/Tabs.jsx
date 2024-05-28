@@ -12,7 +12,13 @@ const Tabs = ({ tab, setTab }) => {
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     sessionStorage.clear();
-    navigate("/");
+    // Clear state
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    // Force reload to ensure all cached data is cleared
+    window.location.reload(true);
+    navigate("/home");
     toast.success("Logged out successfully");
   };
 
@@ -43,7 +49,7 @@ const Tabs = ({ tab, setTab }) => {
           }
           w-full border border-solid border-gray-200 p-4 rounded-lg mb-8 hover:bg-[#cfdfff] hover:text-[#0400ff] font-semibold transition-all duration-200 ease-in
         }`}>
-          Appointments
+          Bookings
         </button>
 
         <button

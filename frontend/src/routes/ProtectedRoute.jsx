@@ -2,6 +2,7 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { authContext } from "../context/authContext.jsx";
+import { toast } from "react-toastify";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { token, role } = useContext(authContext);
@@ -11,7 +12,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (!allowedRoles.includes(role)) {
-    return <Navigate to="/unauthorized" replace />;
+    toast.error("You don't have permission to access this page");
+    return <Navigate to="/login" replace />;
   }
 
   return children;

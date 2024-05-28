@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { formateDate } from "../../utils/formateDate";
 
-const PlayerAbout = ({ data }) => {
-  const { name, bio, place, club, sports, experiences } = data;
+const PlayerAbout = ({ player }) => {
+  const { name, about, place, club, sports, experiences } = player;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -11,7 +11,7 @@ const PlayerAbout = ({ data }) => {
           About
           <span className="text-primaryColor ml-2">{name}</span>
         </h3>
-        <p className="text-base text-gray-700 mb-6">{bio}</p>
+        <p className="text-base text-gray-700 mb-6">{about}</p>
       </div>
 
       {sports && sports.length > 0 && (

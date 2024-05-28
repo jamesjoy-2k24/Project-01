@@ -1,48 +1,78 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import { formateDate } from "../../utils/formateDate";
+import { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { formateDate } from "../../utils/formateDate";
 import FeedbackForm from "./FeedbackForm";
+import { BASE_URL } from "../../config";
+import { useParams } from "react-router-dom";
+import Loader from "../../components/Loader/Loading";
+import Error from "../../components/Error/Error";
 
-const Feedback = ({ reviews }) => {
+const Feedback = () => {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const { id: playerId } = useParams();
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BASE_URL}/reviews/${playerId}/reviews`);
+        const data = await response.json();
+        await setReviews(data.reviews);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+        console.log(error);
+      }
+    };
+    fetchReviews();
+  }, [playerId]);
+
+  if (error) {
+    return <Error message={error.message} />;
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div>
       <div className="mb-[50px]">
         <h4 className="text-[20px] leading-[30px] font-bold text-black mb-[30px]">
-          {/* Display all reviwes lenthg */}
-          All Reviews ({reviews?.length} {reviews?.length > 1 ? "" : "Review"})
+          All Reviews ({reviews.length} {reviews.length === 1 ? "Review" : ""})
         </h4>
 
-        {reviews?.map((review, index) => (
-          <div key={index} className="flex justify-between gap-10 mb-[30px]">
-            <div className="flex gap-3">
-              <figure className="w-12 h-12">
-                <img
-                  src={review?.user?.photo}
-                  alt="user"
-                  className="w-full rounded-full"
-                />
-              </figure>
-
+        {reviews.map((review) => (
+          <div
+            key={review._id}
+            className="mb-4 flex items-center justify-between">
+            <div className="flex gap-3 items-center mb-2 mt-2">
+              <img
+                src={review.sponsor.photo} // Player photo URL
+                alt={review.sponsor.name}
+                className="w-12 h-12 rounded-full object-cover"
+              />
               <div>
                 <h5 className="text-[16px] leading-6 text-primaryColor font-bold">
-                  {review?.sponsor?.name}
+                  {review.sponsor.name}
                 </h5>
                 <p className="text-[14px] leading-6 text-black">
-                  {formateDate(review?.createdAt)}
-                </p>
-                <p className="text__para mt-3 font-medium text-[15px] ">
-                  {review?.reviewText}
+                  {formateDate(review.createdAt)}
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-1">
-              {[...Array(review?.ratings).keys()].map((item, index) => (
-                <FaStar key={index} className="text-yellow-500" />
-              ))}
+            <div className="flex items-end flex-col">
+              <div className="flex gap-1 mb-2">
+                {[...Array(review.rating)].map((_, i) => (
+                  <FaStar key={i} className="text-yellow-500" />
+                ))}
+              </div>
+              <p className="font-medium text-[15px]">{review.comment}</p>
             </div>
           </div>
         ))}

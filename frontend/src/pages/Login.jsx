@@ -41,6 +41,7 @@ const Login = () => {
       if (!res.ok) {
         throw new Error(result.message);
       }
+      toast.success("Welcome Back!");
 
       dispatch({
         type: "LOGIN_SUCCESS",
@@ -50,7 +51,6 @@ const Login = () => {
           token: result.token,
         },
       });
-      toast.success("Welcome Back!");
 
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("role", result.role);
@@ -60,11 +60,14 @@ const Login = () => {
       setFormData({ email: "", password: "" });
       setLoading(false);
 
-      if (result.role === "player") {
-        navigate("/players/profile/me");
+      if (result.role === "admin") {
+        navigate("/admin/dashboard");
+        window.location.reload(true);
+      } else if (result.role === "player") {
+        navigate("/players/profile/me/");
         window.location.reload(true);
       } else if (result.role === "sponsor") {
-        navigate("/users/profile/me");
+        navigate("/players");
         window.location.reload(true);
       }
     } catch (error) {

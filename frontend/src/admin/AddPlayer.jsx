@@ -1,44 +1,48 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import uploadImage from "../../utils/uploadCloudinary.js";
-import { BASE_URL, token } from "../../config";
+import uploadImage from "../utils/uploadCloudinary.js";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function Profile({ player }) {
+function Profile() {
   const [formData, setFormData] = useState({
-    name: player.name || "",
-    email: player.email || "",
-    phone: player.phone || "",
-    bio: player.bio || "",
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    bio: "",
     place: "",
-    club: player.club || "",
-    age: player.age || "",
-    gender: player.gender || "",
-    sports: player.sports || [],
-    price: player.price || "",
-    experiences: player.experiences || [],
-    about: player.about || "",
-    photo: player.photo,
+    club: "",
+    age: "",
+    gender: "",
+    sports: [],
+    price: "",
+    experiences: [],
+    about: "",
+    photo: null,
   });
 
   useEffect(() => {
     setFormData({
-      name: player.name || "",
-      email: player.email || "",
-      phone: player.phone || "",
-      bio: player.bio || "",
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      bio: "",
       place: "",
-      club: player.club || "",
-      age: player.age || "",
-      gender: player.gender || "",
-      sports: player.sports || [],
-      price: player.price || "",
-      experiences: player.experiences || [],
-      about: player.about || "",
-      photo: player.photo,
+      club: "",
+      age: "",
+      gender: "",
+      sports: [],
+      price: "",
+      experiences: [],
+      about: "",
+      photo: null,
     });
-  }, [player]);
+  }, []);
+
+  const navigate = useNavigate();
 
   // Multiple selection of check boxes
   const handleCheckboxChange = (event) => {
@@ -63,33 +67,33 @@ function Profile({ player }) {
       const data = await uploadImage(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        photo: data.secure_url,
+        photo: data.url,
       }));
-      console.log(data, data.secure_url);
+      console.log(data, data.url);
     }
   };
 
-  const updateProfileHandler = async (e) => {
-    e.preventDefault();
-    console.log(formData);
-
+  const addProfile = async (event) => {
+    event.preventDefault();
     try {
-      const res = await fetch(`${BASE_URL}/players/${player._id}`, {
-        method: "PUT",
+      const res = await fetch("http://localhost:8000/api/v1/auth/register", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
-      const result = await res.json();
+
+      const { message } = await res.json();
+
       if (!res.ok) {
-        throw new Error(result.message);
-      } else {
-        toast.success("Profile updated successfully");
+        throw new Error(message);
       }
+
+      toast.success("Successfully registered!");
+      navigate("/admin/dashboard");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message, "Some thing went wrong");
     }
   };
 
@@ -123,12 +127,12 @@ function Profile({ player }) {
   };
 
   return (
-    <section className="ml-10">
-      <h2 className="text-black font-bold text-[24px] leading-9 mb-10">
+    <section className="bg-gray-200 text-center">
+      <h2 className="text-black font-extrabold text-[30px] leading-9 mb-10">
         Profile Information
       </h2>
 
-      <form onSubmit={updateProfileHandler}>
+      <form onSubmit={addProfile} className="w-[70%] mx-auto text-center">
         {[
           {
             label: "Name",
@@ -147,10 +151,9 @@ function Profile({ player }) {
           {
             label: "Phone",
             name: "phone",
-            type: "tel",
+            type: "text",
             placeholder: "Phone Number",
-            pattern: /^[0-9]{10}$/,
-            title: "Only 10 numbers allowed",
+            maxLength: 10,
           },
           {
             label: "Bio",
@@ -183,7 +186,7 @@ function Profile({ player }) {
               value={formData[input.name]}
               onChange={handleInputChange}
               placeholder={input.placeholder}
-              className="form__input"
+              className="form__input text-center bg-white h-[60px]"
               readOnly={input.readOnly}
               disabled={input.disabled}
               maxLength={input.maxLength}
@@ -213,7 +216,7 @@ function Profile({ player }) {
             <p className="form__label">
               Sports <span className="text-primaryColor">*</span>
             </p>
-            <div className="w-[110px] flex flex-col justify-center">
+            <div className="w-[110px] flex flex-col mx-auto">
               <div className="flex items-center justify-between">
                 <p className="font-bold ">Football</p>
                 <input
@@ -278,7 +281,7 @@ function Profile({ player }) {
           </div>
         </div>
 
-        <div className="mb-5">
+        <div className="mb-5 mt-5">
           <p className="form__label text-[22px] font-bold">
             Experiences <span className="text-primaryColor">*</span>
           </p>
@@ -364,7 +367,7 @@ function Profile({ player }) {
         </div>
 
         <div className="mb-5">
-          <p className="form__label">
+          <p className="form__label text-[22px]">
             About <span className="text-primaryColor">*</span>
           </p>
           <textarea

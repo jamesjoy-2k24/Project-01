@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { useReducer, createContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   user: localStorage.getItem("user")
@@ -42,6 +43,7 @@ const authReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(state.user));
@@ -56,6 +58,8 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("token");
     // Force reload to ensure all cached data is cleared
     window.location.reload(true);
+    // Redirect to home page
+    navigate("/home");
     // Dispatch logout action
     dispatch({ type: "LOGOUT" });
   };
